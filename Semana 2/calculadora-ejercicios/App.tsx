@@ -7,18 +7,20 @@ export default function App() {
 let diasDeSemana: number = 7;
 
 //El número de días de entrenamiento
-let diasDeEntrenamiento: number = 5;
+let diasDeEntrenamiento: number = 0;
 
 //El valor objetivo original (cualquier numero definido por usted de 1 a 7)
-let valorObjetivo: number = 6;
+let valorObjetivo: number = 4;
 
 //El tiempo promedio calculado (En base a las horas de entrenamiento a la semana)
-let tiempoPromedio: number;
+let tiempoPromedio: number = 0;
 
 //Valor booleano que describe si se alcanzó el objetivo
 let objetivoAlcanzado: boolean = false;
 
 //Una calificación entre los números 1-3 que indica qué tan bien se cumplen las horas. Puedes decidir la métrica por su cuenta.
+//Un valor de texto que explique la calificación, puedes inventar las explicaciones
+
 interface Calificacion {
   calificacion: number;
   explicacion: string;
@@ -40,33 +42,46 @@ let calificaciones: Calificacion[] = [
 ]
 
 
-// for (const item of calificaciones) {
-//   console.log(item); 
-// }
 
-//Un valor de texto que explique la calificación, puedes inventar las explicaciones
+//arreglo que contiene el registro de entrenamiento semanal
+let registroEntrenamiento: number[] = [1, 0, 2, 0, 0, 1, 2];
 
-
-
-let registroEntrenamiento: number[] = [1,1.5, 1.5, 2, 1, 1, 0.5];
 let sumaHoras: number = 0;
 
-for (let i = 0; i < registroEntrenamiento.length; i++) {
-  sumaHoras += registroEntrenamiento[i];
+registroEntrenamiento.forEach(registro => {
+  if (registro > 0) {
+    sumaHoras += registro;
+    diasDeEntrenamiento++;
+  }
+});
+
+// console.log("dias entrenados: "+diasDeEntrenamiento);
+// console.log("Total de horas entrenadas a la semana: "+sumaHoras);
+
+// promedio de horas entrenadas a la semana
+tiempoPromedio = sumaHoras / diasDeEntrenamiento;
+
+
+// si los dias de entrenamiento son mayores o iguales al valor objetivo, se considera que se ha alcanzado el objetivo
+if (diasDeEntrenamiento >= valorObjetivo) {
+  objetivoAlcanzado = true;
+} else {
+  objetivoAlcanzado = false;
 }
-
-tiempoPromedio = sumaHoras / registroEntrenamiento.length;
-
 
 
 
 let calificacionFinal: number;
 let explicacionFinal: string;
 
-if (sumaHoras >= 9) {
+// si los dias de entrenamiento son mayores o iguales al valor objetivo, se asigna la calificaicion 3
+// si los dias de entrenamiento son mayores o iguales a la mitad del valor objetivo, se asigna la calificacion 2
+// de lo contrario, se asigna la calificacion 1
+
+if (diasDeEntrenamiento >= valorObjetivo) {
   calificacionFinal = calificaciones[2].calificacion;
   explicacionFinal = calificaciones[2].explicacion;
-} else if (sumaHoras >= 5) {
+} else if (diasDeEntrenamiento >= valorObjetivo / 2) {
   calificacionFinal = calificaciones[1].calificacion;
   explicacionFinal = calificaciones[1].explicacion;
 } else {
@@ -74,28 +89,36 @@ if (sumaHoras >= 9) {
   explicacionFinal = calificaciones[0].explicacion;
 }
 
+
+
+// json que contiene el resultado final
 let resultado = {
-  diasDeSemana: diasDeSemana,
-  diasEntrenados: diasDeEntrenamiento,
+  periodoLength: diasDeSemana,
+  trainingDays: diasDeEntrenamiento,
   success: objetivoAlcanzado,
-  calificacion: calificacionFinal,
-  explicacion: explicacionFinal,
-  valorObjetivo: valorObjetivo,
-  tiempoPromedio: tiempoPromedio
+  rating: calificacionFinal,
+  ratingDescription: explicacionFinal,
+  target: valorObjetivo,
+  averageTime: tiempoPromedio
 }
+
+let success: string = resultado.success ? "Si" : "No";
 
 console.log(resultado);
 
+
   return (
     <View style={styles.container}>
-      <Text>Desarrollo Móvil 1</Text>
-      <Text>{"Horas entrenadas: "+registroEntrenamiento.length+" dias"}</Text>
-      <Text>{"Objetivo de dias de entrenamiento: "+valorObjetivo}</Text>
-      <Text>{"Calificacion: "+calificacionFinal}</Text>
-      <Text>{"Detalles de calificacion:"}</Text>
-      <Text>{explicacionFinal}</Text>
-      <Text>{}</Text>
-      <Text>{"Horas promedio entrenadas a la semana: " + tiempoPromedio.toFixed(2) + " horas"}</Text>
+      <Text style={styles.tittle1}>Calculadora de ejercicios</Text>
+      <Text style={styles.tittle2}>Resultados del entrenamiento:</Text>
+      <Text>Dias de la semana: {resultado.periodoLength} dias</Text>
+      <Text>Dias entrenados a la semana: {resultado.trainingDays} dias</Text>
+      <Text>objetivo alcanzado: {success}</Text>
+      <Text>Calificacion de entrenamiento: {resultado.rating} de 3</Text>
+      <Text style={{fontWeight: 'bold'}}>Descripcion:</Text>
+      <Text>{resultado.ratingDescription}</Text>
+      <Text>Objetivo: {resultado.target} dias</Text>
+      <Text>Promedio de horas entrenadas: {resultado.averageTime.toFixed(1)} hora</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -108,4 +131,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  tittle1: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  tittle2: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  }
 });
