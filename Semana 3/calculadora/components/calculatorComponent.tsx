@@ -25,11 +25,7 @@ export default function CalculatorComponent(props: Calculadora) {
             break;
         case 4:
             // Dividir
-            if (props.num2 > 0) {
-                resultado = props.num1 / props.num2;
-            } else {
-                resultado = 0;
-            }
+            resultado = props.num2 > 0 ? props.num1 / props.num2 : 0;
             operacion = 'División';
             break;
         default:
@@ -42,7 +38,7 @@ export default function CalculatorComponent(props: Calculadora) {
       <Text>Primer numero: {props.num1}</Text>
       <Text>Segundo numero: {props.num2}</Text>
       <Text>Operación: {operacion}</Text>
-      <Text>Resultado: {resultado}</Text>
+      <Text style={{fontWeight: 'bold'}}>Resultado: {resultado}</Text>
     </View>
   )
 }

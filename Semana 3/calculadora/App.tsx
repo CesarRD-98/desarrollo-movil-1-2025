@@ -5,8 +5,8 @@ import CalculatorComponent from './components/calculatorComponent';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Calculadora</Text>
-      <CalculatorComponent num1={10} num2={5} operacion={4} />
+      <Text style={{fontSize: 18, fontWeight: 'bold'}}>Calculadora</Text>
+      <CalculatorComponent num1={8} num2={2} operacion={4} />
       <StatusBar style="auto" />
     </View>
   );
