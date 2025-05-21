@@ -8,7 +8,7 @@ export default function Cartas() {
 
     const [partidas, setPartidas] = useState<number>(0)
 
-    const [cartas, setCartas] = useState([...Cartas1, ...Cartas2].sort(() => Math.random() + 0.5));
+    const [cartas, setCartas] = useState([...Cartas1, ...Cartas2].sort(() => Math.random() - 0.5));
     const [seleccionadas, setSeleccionadas] = useState<number[]>([]);
 
 
