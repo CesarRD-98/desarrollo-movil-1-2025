@@ -8,7 +8,7 @@ export default function Transferencias() {
     const [monto, setMonto] = useState<string>('')
     const [nombreDestinatario, setNombreDestinatario] = useState<string>('')
 
-    const { transferirSaldo } = useBanco()
+    const { transferirSaldo, saldo } = useBanco()
 
     return (
         <View style={styles.container}>
@@ -33,12 +33,17 @@ export default function Transferencias() {
             />
             <View style={styles.container}>
                 <Button title='Transferir saldo' onPress={() => {
-                    transferirSaldo(Number(monto))
-                    setMonto('')
-                    setNumeroCuenta('')
-                    setNombreDestinatario('')
-                    Alert.alert('Acción', `Transferencia exitosa al destinatario ${nombreDestinatario} con el monto de L.${monto}`)
-                }}/>
+                    if (Number(monto) <= saldo) {
+                        transferirSaldo(Number(monto))
+                        setMonto('')
+                        setNumeroCuenta('')
+                        setNombreDestinatario('')
+                        Alert.alert('Acción', `Transferencia exitosa al destinatario ${nombreDestinatario} con el monto de L.${monto}`)
+                    } else {
+                        Alert.alert('Acción', 'Su saldo es insuficiente para realizar la trasnferencia')
+                    }
+
+                }} />
             </View>
         </View>
     )
