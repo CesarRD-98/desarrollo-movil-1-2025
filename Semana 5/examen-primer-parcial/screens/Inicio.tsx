@@ -1,13 +1,16 @@
 import { View, Text, StyleSheet, Button } from 'react-native'
 import React from 'react'
+import { useBanco } from '../providers/BancoProvider';
 
 export default function Inicio() {
+
+    const { saldo } = useBanco()
     return (
         <View style={styles.container}>
             <Text style={styles.dialogo}>Bienvenido a la aplicación de tu Banco Favorito</Text>
             <View style={styles.container2}>
                 <Text style={styles.title}>Saldo Actual:</Text>
-                <Text style={{fontSize: 18}}>L.0.00</Text>
+                <Text style={{ fontSize: 18 }}>L.{saldo}</Text>
             </View>
             <View style={styles.container}>
                 <Button title='Depositar saldo' />
