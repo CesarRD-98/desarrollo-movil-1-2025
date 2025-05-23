@@ -1,12 +1,33 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, FlatList } from 'react-native'
 import React from 'react'
+import { useBanco } from '../providers/BancoProvider';
 
 export default function Historico() {
-  return (
-    <View>
-      <Text style={styles.dialogo}>Historial de transacciones</Text>
-    </View>
-  )
+
+    const { tipoTransaccion } = useBanco()
+    return (
+        <View>
+            <Text style={styles.dialogo}>Historial de transacciones</Text>
+            <FlatList
+                data={tipoTransaccion}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.card}>
+                        <Text style={{
+                            textAlign: 'center',
+                            fontSize: 18
+                        }}>{item.descripcion}</Text>
+                        <Text style={{
+                            textAlign: 'center',
+                            fontWeight: 'bold',
+                            marginBottom: 4,
+                            fontSize: 14
+                        }}>L.{item.saldo}</Text>
+                    </View>
+                )}
+            />
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({

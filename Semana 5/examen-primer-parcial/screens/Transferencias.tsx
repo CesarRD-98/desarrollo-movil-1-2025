@@ -1,11 +1,14 @@
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native'
+import { View, Text, StyleSheet, Button, TextInput, Alert } from 'react-native'
 import React, { useState } from 'react'
+import { useBanco } from '../providers/BancoProvider'
 
 export default function Transferencias() {
 
     const [numeroCuenta, setNumeroCuenta] = useState<string>('')
     const [monto, setMonto] = useState<string>('')
     const [nombreDestinatario, setNombreDestinatario] = useState<string>('')
+
+    const { transferirSaldo } = useBanco()
 
     return (
         <View style={styles.container}>
@@ -29,7 +32,13 @@ export default function Transferencias() {
                 onChangeText={setNombreDestinatario}
             />
             <View style={styles.container}>
-                <Button title='Transferir saldo' />
+                <Button title='Transferir saldo' onPress={() => {
+                    transferirSaldo(Number(monto))
+                    setMonto('')
+                    setNumeroCuenta('')
+                    setNombreDestinatario('')
+                    Alert.alert('Acción', `Transferencia exitosa al destinatario ${nombreDestinatario} con el monto de L.${monto}`)
+                }}/>
             </View>
         </View>
     )
