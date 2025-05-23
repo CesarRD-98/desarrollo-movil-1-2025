@@ -7,15 +7,22 @@ export default function BancoProvider({ children }: Children) {
 
     const [saldo, setSaldo] = useState<number>(10000)
     const [tipoTransaccion, setTipoTransaccion] = useState<Transaccion[]>([])
+    const [index, setIndex] = useState<number>(0)
+
+    function autoIncremento() {
+        setIndex(index + 1)
+    }
     
     function depositarSaldo() {
         setSaldo(saldo + 500)
-        setTipoTransaccion([...tipoTransaccion, {saldo: 500, descripcion: 'Deposito'}])
+        autoIncremento()
+        setTipoTransaccion([...tipoTransaccion, {id: index, saldo: 500, descripcion: 'Deposito'}])
     }
 
     function transferirSaldo(retiro: number) {
         setSaldo(saldo - retiro)
-        setTipoTransaccion([...tipoTransaccion, {saldo: retiro, descripcion: 'Retiro'}])
+        autoIncremento()
+        setTipoTransaccion([...tipoTransaccion, {id: index, saldo: retiro, descripcion: 'Retiro'}])
     }
 
     return (

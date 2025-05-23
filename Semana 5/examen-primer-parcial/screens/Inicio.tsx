@@ -1,20 +1,39 @@
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, Alert, FlatList } from 'react-native'
 import React from 'react'
 import { useBanco } from '../providers/BancoProvider';
 
 export default function Inicio() {
 
-    const { saldo } = useBanco()
+    const { saldo, depositarSaldo, tipoTransaccion } = useBanco()
     return (
         <View style={styles.container}>
             <Text style={styles.dialogo}>Bienvenido a la aplicación de tu Banco Favorito</Text>
             <View style={styles.container2}>
                 <Text style={styles.title}>Saldo Actual:</Text>
-                <Text style={{ fontSize: 18 }}>L.{saldo}</Text>
+                <Text style={{ fontSize: 18, marginBottom: 14 }}>L.{saldo}</Text>
+                <Button title='Depositar saldo' onPress={() => {
+                    Alert.alert('Acción', 'Se ha realizado un deposito exitosamente')
+                    depositarSaldo()
+                }}/>
             </View>
-            <View style={styles.container}>
-                <Button title='Depositar saldo' />
-            </View>
+            <FlatList
+                    data={tipoTransaccion}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.card}>
+                            <Text style={{
+                                textAlign: 'center',
+                                fontSize: 18
+                            }}>{item.descripcion}</Text>
+                            <Text style={{
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                marginBottom: 4,
+                                fontSize: 14
+                            }}>L.{item.saldo}</Text>
+                        </View>
+                    )}
+                />
         </View>
     )
 }
